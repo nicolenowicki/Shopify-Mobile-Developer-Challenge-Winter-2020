@@ -240,39 +240,17 @@ class GameScene: SKScene {
         // Spacing constants
         
         let widthSpacing: CGFloat = 30
-        var widthPadding: CGFloat = 50
+        let widthPadding: CGFloat = 80
         let heightSpacing: CGFloat = 30
-        var heightPadding: CGFloat = 200
         
         // Size of cards calculation
         
-        let totalHeight: CGFloat = size.height - heightPadding - heightSpacing*(CGFloat(integerLiteral: (numberOfCards/2)))
-        let heightOfCards: CGFloat = totalHeight/CGFloat(integerLiteral: (numberOfCards/2))
         let totalWidth: CGFloat = size.width - widthPadding - widthSpacing*(CGFloat(integerLiteral: numberOfCardsRow + 1))
-        let widthOfCards: CGFloat = totalWidth/CGFloat(integerLiteral: numberOfCardsRow)
-        
-        var sizeOfCards: CGFloat = 0
-        
-        // Since cards are square choose largest of width and height to size the cards
-        
-        if heightOfCards > widthOfCards {
-            sizeOfCards = widthOfCards
+        var sizeOfCards: CGFloat = totalWidth/CGFloat(integerLiteral: numberOfCardsRow)
+        var heightPadding = size.height -
+            sizeOfCards*(CGFloat(integerLiteral: numberOfCards/2)) -
+            heightSpacing*(CGFloat(integerLiteral: numberOfCards/2))
             
-            // Calculate extra padding to center cards later
-            
-            heightPadding = size.height -
-                sizeOfCards*(CGFloat(integerLiteral: numberOfCards/2)) -
-                heightSpacing*(CGFloat(integerLiteral: numberOfCards/2))
-            
-        } else {
-            sizeOfCards = heightOfCards
-            
-            // Calculate extra padding to center cards later
-            
-            widthPadding = size.width -
-                sizeOfCards*(CGFloat(integerLiteral: numberOfCardsRow)) -
-                widthSpacing*(CGFloat(integerLiteral: numberOfCardsRow + 1))
-        }
         
         // Special case: match three
         
