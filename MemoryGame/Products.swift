@@ -25,4 +25,3 @@ class ProductImage: Decodable {
     let id: Int?
     let src: String?
 }
-

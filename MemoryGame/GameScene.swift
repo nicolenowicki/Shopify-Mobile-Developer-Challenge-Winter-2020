@@ -250,7 +250,7 @@ class GameScene: SKScene {
         let widthPadding: CGFloat = 80
         let heightSpacing: CGFloat = 30
         
-        // Size of cards calculation
+        // Size of cards and padding calculation
         
         let totalWidth: CGFloat = size.width - widthPadding - widthSpacing*(CGFloat(integerLiteral: numberOfCardsRow + 1))
         var sizeOfCards: CGFloat = totalWidth/CGFloat(integerLiteral: numberOfCardsRow)
@@ -367,7 +367,7 @@ class GameScene: SKScene {
             if cardsFlipped[count - 2].id == cardsFlipped[count - 1].id &&
                 cardsFlipped[count - 2].id == cardsFlipped[count - 3].id {
                 
-                // Found a match
+                // Match found
                 
                 cardsFlipped[count - 3].run(sequence)
                 cardsFlipped[count - 2].run(sequence)
