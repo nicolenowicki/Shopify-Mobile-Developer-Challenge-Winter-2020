@@ -25,7 +25,8 @@ There are three levels implemented:
 ### User Wins
 <img src="https://github.com/nicolenowicki/Shopify-Mobile-Developer-Challenge-Winter-2020/blob/master/AppImages/Simulator%20Screen%20Shot%20-%20iPhone%207%20-%202019-09-17%20at%2010.24.54.png" alt=""
 	title="Some Matches - Easy Level" width="50%" height="50%"/>
-Note: Snowflakes are animated
+	
+* Note: snowflakes are animated	
 ### No Matches - Medium & Hard Level
   <img src="https://github.com/nicolenowicki/Shopify-Mobile-Developer-Challenge-Winter-2020/blob/master/AppImages/Simulator%20Screen%20Shot%20-%20iPhone%207%20-%202019-09-17%20at%2010.25.13.png" alt=""
 	title="No Matches - Medium & Hard Level" width="50%" height="50%"/>   
