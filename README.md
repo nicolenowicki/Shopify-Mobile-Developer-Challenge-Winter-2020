@@ -2,7 +2,9 @@
 ## Goal
 Create a memory matching game using the JSON endpoint provided. 
 ## Implementation
-To implement the matching game, Swift's SpriteKit framework was utilized. This implementation features the use of SKPhysicsBody to produce an animation at the end of the game.
+To implement the matching game, Swift's SpriteKit framework was utilized. This implementation features the use of SKPhysicsBody to produce an animation at the end of the game. 
+
+Note: Thought I would have some fun and make this winter themed for my winter 2020 application :)
 ## How to Play
 There are three levels implemented:
 - Easy, match 10 pairs to win
@@ -20,6 +22,10 @@ There are three levels implemented:
 ### Some Matches - Easy Level
   <img src="https://github.com/nicolenowicki/Shopify-Mobile-Developer-Challenge-Winter-2020/blob/master/AppImages/Simulator%20Screen%20Shot%20-%20iPhone%207%20-%202019-09-17%20at%2010.24.21.png" alt=""
 	title="Some Matches - Easy Level" width="50%" height="50%"/>
+### User Wins
+<img src="https://github.com/nicolenowicki/Shopify-Mobile-Developer-Challenge-Winter-2020/blob/master/AppImages/Simulator%20Screen%20Shot%20-%20iPhone%207%20-%202019-09-17%20at%2010.24.54.png" alt=""
+	title="Some Matches - Easy Level" width="50%" height="50%"/>
+Note: Snowflakes are animated
 ### No Matches - Medium & Hard Level
   <img src="https://github.com/nicolenowicki/Shopify-Mobile-Developer-Challenge-Winter-2020/blob/master/AppImages/Simulator%20Screen%20Shot%20-%20iPhone%207%20-%202019-09-17%20at%2010.25.13.png" alt=""
 	title="No Matches - Medium & Hard Level" width="50%" height="50%"/>   
