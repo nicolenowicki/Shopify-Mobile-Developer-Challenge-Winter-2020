@@ -44,5 +44,3 @@ class Card: SKSpriteNode {
         fatalError("init(coder:) has not been implemented")
     }
 }
-
-

@@ -42,10 +42,11 @@ class GameScene: SKScene {
             SKAction.scale(to: 1.0, duration: 0.5),
             SKAction.wait(forDuration: 0.5)])
         
-        if touchedNode.name == "easy" {
+        if touchedNode.name == "easy" && !gameStarted {
             numberOfCards = 10
             numberOfCardsRow = 4
             matchThree = false
+            gameStarted = true
             
             easyLabel.run(SKAction.scale(to: 0.0, duration: 0.3)) {
                 self.easyLabel.text = "Match 10 Pairs to Win"
@@ -55,10 +56,11 @@ class GameScene: SKScene {
                     self.fetchCards()
                 }
             }
-        } else if touchedNode.name == "medium" {
+        } else if touchedNode.name == "medium" && !gameStarted {
             numberOfCards = 15
             numberOfCardsRow = 5
             matchThree = false
+            gameStarted = true
             
             mediumLabel.run(SKAction.scale(to: 0.0, duration: 0.3)) {
                 self.mediumLabel.text = "Match 15 Pairs to Win"
@@ -68,10 +70,11 @@ class GameScene: SKScene {
                     self.fetchCards()
                 }
             }
-        } else if touchedNode.name == "hard" {
+        } else if touchedNode.name == "hard" && !gameStarted {
             numberOfCards = 10
             numberOfCardsRow = 5
             matchThree = true
+            gameStarted = true
             
             hardLabel.run(SKAction.scale(to: 0.0, duration: 0.3)) {
                 self.hardLabel.text = "Match 10 Triples to Win"
@@ -117,6 +120,8 @@ class GameScene: SKScene {
     
     private var scoreLabel: SKLabelNode!
     private var winnerLabel: SKLabelNode!
+    
+    private var gameStarted: Bool = false
     
     private var productImages: [ProductImage] = []
     private var cards: [Card] = []
@@ -179,6 +184,8 @@ class GameScene: SKScene {
         hardLabel.setScale(0)
         hardLabel.isHidden = false
         hardLabel.run(SKAction.scale(to: 1.0, duration: 0.3))
+        
+        gameStarted = false
     }
     
     private func hideMenu() {
@@ -232,7 +239,7 @@ class GameScene: SKScene {
             } catch {
                 self.presentMenu()
             }
-            }.resume()
+        }.resume()
     }
     
     private func initializeCards() {
