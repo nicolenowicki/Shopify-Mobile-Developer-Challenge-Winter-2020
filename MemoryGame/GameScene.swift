@@ -9,40 +9,18 @@
 import SpriteKit
 import GameplayKit
 
+// MARK: GameScene
+
 class GameScene: SKScene {
     
-    // menu elements
+    // MARK: Internal
     
-    private var titleLabel: SKLabelNode!
-    private var difficultLabel: SKLabelNode!
-    private var slightlyMoreDifficultLabel: SKLabelNode!
-    private var matchThreeLabel: SKLabelNode!
-    
-    // gameview elements
-    
-    private var scoreLabel: SKLabelNode!
-    private var winnerLabel: SKLabelNode!
-    
-    private var productImages: [ProductImage] = []
-    private var cards: [Card] = []
-    private var cardsFlipped: [Card] = []
-    
-    private var currentScore = 0
-    private var numberOfCards: Int = 10
-    
-    private var matchThree: Bool = false
-    private var numberOfCardsRow: Int = 4
-    
-    private var loadingSpinner: UIActivityIndicatorView!
-    
-    private var snowAnimation: [SKSpriteNode] = []
-    
-    // end game elements
-    
-    private var endGameLabel: SKLabelNode!
-    private var returnToMenuLabel: SKLabelNode!
+    override func update(_ currentTime: TimeInterval) { }
     
     override func didMove(to view: SKView) {
+        
+        // Initialize Loading Spinner
+        
         loadingSpinner = UIActivityIndicatorView()
         loadingSpinner.center = CGPoint(x: UIScreen.main.bounds.width/2, y: UIScreen.main.bounds.height/2)
         loadingSpinner.stopAnimating()
@@ -52,8 +30,6 @@ class GameScene: SKScene {
         presentMenu()
     }
     
-    override func update(_ currentTime: TimeInterval) { }
-    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first else {
             return
@@ -61,46 +37,48 @@ class GameScene: SKScene {
         
         let location = touch.location(in: self)
         let touchedNode = atPoint(location)
-        if touchedNode.name == "difficult" {
+        
+        let startGameSequence = SKAction.sequence([
+            SKAction.scale(to: 1.0, duration: 0.5),
+            SKAction.wait(forDuration: 0.5)])
+        
+        if touchedNode.name == "easy" {
             numberOfCards = 10
-            matchThree = false
             numberOfCardsRow = 4
-            difficultLabel.run(SKAction.scale(to: 0.0, duration: 0.3)) {
-                self.difficultLabel.text = "Match 10 Pairs to Win"
-                self.difficultLabel.run(SKAction.scale(to: 1.0, duration: 0.5)) {
-                    self.difficultLabel.run(SKAction.wait(forDuration: 0.5)) {
-                        self.hideMenu()
-                        self.initializeScore()
-                        self.fetchCards()
-                    }
-                }
-            }
-        } else if touchedNode.name == "slightly_more_difficult" {
-            numberOfCards = 15
             matchThree = false
-            numberOfCardsRow = 5
-            slightlyMoreDifficultLabel.run(SKAction.scale(to: 0.0, duration: 0.3)) {
-                self.slightlyMoreDifficultLabel.text = "Match 16 Pairs to Win"
-                self.slightlyMoreDifficultLabel.run(SKAction.scale(to: 1.0, duration: 0.5)) {
-                    self.slightlyMoreDifficultLabel.run(SKAction.wait(forDuration: 0.5)) {
-                        self.hideMenu()
-                        self.initializeScore()
-                        self.fetchCards()
-                    }
+            
+            easyLabel.run(SKAction.scale(to: 0.0, duration: 0.3)) {
+                self.easyLabel.text = "Match 10 Pairs to Win"
+                self.easyLabel.run(startGameSequence) {
+                    self.hideMenu()
+                    self.initializeScore()
+                    self.fetchCards()
                 }
             }
-        } else if touchedNode.name == "match_three" {
-            numberOfCards = 10
-            matchThree = true
+        } else if touchedNode.name == "medium" {
+            numberOfCards = 15
             numberOfCardsRow = 5
-            matchThreeLabel.run(SKAction.scale(to: 0.0, duration: 0.3)) {
-                self.matchThreeLabel.text = "Match 10 Triples to Win"
-                self.matchThreeLabel.run(SKAction.scale(to: 1.0, duration: 0.5)) {
-                    self.matchThreeLabel.run(SKAction.wait(forDuration: 0.5)) {
-                        self.hideMenu()
-                        self.initializeScore()
-                        self.fetchCards()
-                    }
+            matchThree = false
+            
+            mediumLabel.run(SKAction.scale(to: 0.0, duration: 0.3)) {
+                self.mediumLabel.text = "Match 15 Pairs to Win"
+                self.mediumLabel.run(startGameSequence) {
+                    self.hideMenu()
+                    self.initializeScore()
+                    self.fetchCards()
+                }
+            }
+        } else if touchedNode.name == "hard" {
+            numberOfCards = 10
+            numberOfCardsRow = 5
+            matchThree = true
+            
+            hardLabel.run(SKAction.scale(to: 0.0, duration: 0.3)) {
+                self.hardLabel.text = "Match 10 Triples to Win"
+                self.hardLabel.run(startGameSequence) {
+                    self.hideMenu()
+                    self.initializeScore()
+                    self.fetchCards()
                 }
             }
         } else if touchedNode.name == "card" {
@@ -118,6 +96,7 @@ class GameScene: SKScene {
             endGameLabel.run(SKAction.scale(to: 0, duration: 0.3)) {
                 self.removeChildren(in: [self.endGameLabel])
             }
+            
             returnToMenuLabel.run(SKAction.scale(to: 0, duration: 0.3)) {
                 self.removeChildren(in: [self.returnToMenuLabel])
                 self.presentMenu()
@@ -125,7 +104,39 @@ class GameScene: SKScene {
         }
     }
     
-    func presentMenu() {
+    // MARK: Private
+    
+    // Menu Elements
+    
+    private var titleLabel: SKLabelNode!
+    private var easyLabel: SKLabelNode!
+    private var mediumLabel: SKLabelNode!
+    private var hardLabel: SKLabelNode!
+    
+    // Gameview Elements
+    
+    private var scoreLabel: SKLabelNode!
+    private var winnerLabel: SKLabelNode!
+    
+    private var productImages: [ProductImage] = []
+    private var cards: [Card] = []
+    private var cardsFlipped: [Card] = []
+    
+    private var currentScore = 0
+    private var numberOfCards: Int = 10
+    
+    private var matchThree: Bool = false
+    private var numberOfCardsRow: Int = 4
+    
+    private var loadingSpinner: UIActivityIndicatorView!
+    private var snowAnimation: [SKSpriteNode] = []
+    
+    // End Game Elements
+    
+    private var endGameLabel: SKLabelNode!
+    private var returnToMenuLabel: SKLabelNode!
+    
+    private func presentMenu() {
         titleLabel = SKLabelNode(fontNamed: "Helvetica")
         titleLabel.text = "MEMORY GAME"
         titleLabel.fontSize = 70
@@ -136,75 +147,75 @@ class GameScene: SKScene {
         titleLabel.isHidden = false
         titleLabel.run(SKAction.scale(to: 1.0, duration: 0.3))
         
-        difficultLabel = SKLabelNode(fontNamed: "Helvetica")
-        difficultLabel.text = "EASY"
-        difficultLabel.fontSize = 50
-        difficultLabel.position = CGPoint(x: 0, y: titleLabel.position.y - 150)
-        difficultLabel.name = "difficult"
-        self.addChild(difficultLabel)
+        easyLabel = SKLabelNode(fontNamed: "Helvetica")
+        easyLabel.text = "EASY"
+        easyLabel.fontSize = 50
+        easyLabel.position = CGPoint(x: 0, y: titleLabel.position.y - 150)
+        easyLabel.name = "easy"
+        self.addChild(easyLabel)
         
-        difficultLabel.setScale(0)
-        difficultLabel.isHidden = false
-        difficultLabel.run(SKAction.scale(to: 1.0, duration: 0.3))
+        easyLabel.setScale(0)
+        easyLabel.isHidden = false
+        easyLabel.run(SKAction.scale(to: 1.0, duration: 0.3))
         
-        slightlyMoreDifficultLabel = SKLabelNode(fontNamed: "Helvetica")
-        slightlyMoreDifficultLabel.text = "MEDIUM"
-        slightlyMoreDifficultLabel.fontSize = 50
-        slightlyMoreDifficultLabel.position = CGPoint(x: 0, y: difficultLabel.position.y - 100)
-        slightlyMoreDifficultLabel.name = "slightly_more_difficult"
-        self.addChild(slightlyMoreDifficultLabel)
+        mediumLabel = SKLabelNode(fontNamed: "Helvetica")
+        mediumLabel.text = "MEDIUM"
+        mediumLabel.fontSize = 50
+        mediumLabel.position = CGPoint(x: 0, y: easyLabel.position.y - 100)
+        mediumLabel.name = "medium"
+        self.addChild(mediumLabel)
         
-        slightlyMoreDifficultLabel.setScale(0)
-        slightlyMoreDifficultLabel.isHidden = false
-        slightlyMoreDifficultLabel.run(SKAction.scale(to: 1.0, duration: 0.3))
+        mediumLabel.setScale(0)
+        mediumLabel.isHidden = false
+        mediumLabel.run(SKAction.scale(to: 1.0, duration: 0.3))
         
-        matchThreeLabel = SKLabelNode(fontNamed: "Helvetica")
-        matchThreeLabel.text = "HARD"
-        matchThreeLabel.fontSize = 50
-        matchThreeLabel.position = CGPoint(x: 0, y: slightlyMoreDifficultLabel.position.y - 100)
-        matchThreeLabel.name = "match_three"
-        self.addChild(matchThreeLabel)
+        hardLabel = SKLabelNode(fontNamed: "Helvetica")
+        hardLabel.text = "HARD"
+        hardLabel.fontSize = 50
+        hardLabel.position = CGPoint(x: 0, y: mediumLabel.position.y - 100)
+        hardLabel.name = "hard"
+        self.addChild(hardLabel)
         
-        matchThreeLabel.setScale(0)
-        matchThreeLabel.isHidden = false
-        matchThreeLabel.run(SKAction.scale(to: 1.0, duration: 0.3))
+        hardLabel.setScale(0)
+        hardLabel.isHidden = false
+        hardLabel.run(SKAction.scale(to: 1.0, duration: 0.3))
     }
     
-    func hideMenu() {
+    private func hideMenu() {
         titleLabel.run(SKAction.scale(to: 0, duration: 0.3)) {
             self.titleLabel.isHidden = false
         }
         
-        difficultLabel.run(SKAction.scale(to: 0, duration: 0.3)) {
-            self.difficultLabel.isHidden = false
+        easyLabel.run(SKAction.scale(to: 0, duration: 0.3)) {
+            self.easyLabel.isHidden = false
         }
         
-        slightlyMoreDifficultLabel.run(SKAction.scale(to: 0, duration: 0.3)) {
-            self.slightlyMoreDifficultLabel.isHidden = false
+        mediumLabel.run(SKAction.scale(to: 0, duration: 0.3)) {
+            self.mediumLabel.isHidden = false
         }
         
-        matchThreeLabel.run(SKAction.scale(to: 0, duration: 0.3)) {
-            self.matchThreeLabel.isHidden = false
+        hardLabel.run(SKAction.scale(to: 0, duration: 0.3)) {
+            self.hardLabel.isHidden = false
             self.loadingSpinner.startAnimating()
         }
     }
     
-    func fetchCards() {
+    private func fetchCards() {
+        productImages = []
         let jsonURL = "https://shopicruit.myshopify.com/admin/products.json?page=1&access_token=c32313df0d0ef512ca64d5b336a0d7c6"
-        guard let url = URL(string: jsonURL) else { return }
         
+        guard let url = URL(string: jsonURL) else { return }
         URLSession.shared.dataTask(with: url) { (data, response, error)  in
             guard let data = data else { return }
-            
             do {
                 let decodedJSON = try JSONDecoder().decode(Products.self, from: data)
                 let products = decodedJSON.products
                 
-                // initialize list of product images to be used
+                // Initialize list of product images to be used
                 
                 for i in 0...(self.numberOfCards - 1) {
                     
-                    // append twice because we need a match
+                    // Append twice (or three times) to produce matches
                     
                     guard let image = products[i].image else { continue }
                     
@@ -215,52 +226,73 @@ class GameScene: SKScene {
                         self.productImages.append(image)
                     }
                 }
+                
                 self.productImages.shuffle()
                 self.initializeCards()
             } catch {
-                print("error")
+                self.presentMenu()
             }
-        }.resume()
+            }.resume()
     }
     
-    func initializeCards() {
-        // spacing constants
+    private func initializeCards() {
+        
+        // Spacing constants
+        
         let widthSpacing: CGFloat = 30
         var widthPadding: CGFloat = 50
         let heightSpacing: CGFloat = 30
         var heightPadding: CGFloat = 200
         
-        let heightOfCards: CGFloat =
-            (self.size.height - heightPadding - heightSpacing*(CGFloat(integerLiteral: (numberOfCards/2))))/CGFloat(integerLiteral: (numberOfCards/2))
-        let widthOfCards: CGFloat =
-            (self.size.width - widthPadding - widthSpacing*(CGFloat(integerLiteral: numberOfCardsRow + 1)))/(CGFloat(integerLiteral: numberOfCardsRow))
+        // Size of cards calculation
+        
+        let totalHeight: CGFloat = size.height - heightPadding - heightSpacing*(CGFloat(integerLiteral: (numberOfCards/2)))
+        let heightOfCards: CGFloat = totalHeight/CGFloat(integerLiteral: (numberOfCards/2))
+        let totalWidth: CGFloat = size.width - widthPadding - widthSpacing*(CGFloat(integerLiteral: numberOfCardsRow + 1))
+        let widthOfCards: CGFloat = totalWidth/CGFloat(integerLiteral: numberOfCardsRow)
+        
         var sizeOfCards: CGFloat = 0
+        
+        // Since cards are square choose largest of width and height to size the cards
         
         if heightOfCards > widthOfCards {
             sizeOfCards = widthOfCards
             
-            heightPadding = self.size.height - sizeOfCards*(CGFloat(floatLiteral: CGFloat.NativeType(numberOfCards/2))) - heightSpacing*(CGFloat(floatLiteral: CGFloat.NativeType(numberOfCards/2)))
+            // Calculate extra padding to center cards later
+            
+            heightPadding = size.height -
+                sizeOfCards*(CGFloat(integerLiteral: numberOfCards/2)) -
+                heightSpacing*(CGFloat(integerLiteral: numberOfCards/2))
             
         } else {
             sizeOfCards = heightOfCards
             
-            widthPadding = self.size.width - sizeOfCards*(CGFloat(integerLiteral: numberOfCardsRow)) - widthSpacing*(CGFloat(integerLiteral: numberOfCardsRow + 1))
+            // Calculate extra padding to center cards later
+            
+            widthPadding = size.width -
+                sizeOfCards*(CGFloat(integerLiteral: numberOfCardsRow)) -
+                widthSpacing*(CGFloat(integerLiteral: numberOfCardsRow + 1))
         }
         
-        // special case: match three
+        // Special case: match three
         
         if matchThree {
-            sizeOfCards = (self.size.width - widthPadding - widthSpacing*6)/5 // change
-            heightPadding = self.size.height - sizeOfCards*6 - heightSpacing*6
+            sizeOfCards = (size.width - widthPadding -
+                widthSpacing*(CGFloat(integerLiteral: numberOfCardsRow + 1)))/(CGFloat(integerLiteral: numberOfCardsRow))
+            heightPadding = size.height -
+                sizeOfCards*(CGFloat(integerLiteral: numberOfCardsRow + 1)) -
+                heightSpacing*(CGFloat(integerLiteral: numberOfCardsRow + 1))
         }
         
-        var previousX: CGFloat = (self.size.width / -2) + widthPadding*0.5 + sizeOfCards*0.5 + widthSpacing
-        var previousY: CGFloat = (self.size.height / -2) + heightPadding*0.5
+        var previousX: CGFloat = (size.width / -2) + widthPadding*0.5 + sizeOfCards*0.5 + widthSpacing
+        var previousY: CGFloat = (size.height / -2) + heightPadding*0.5
         var currentImage = 0
+        cards = []
+        cardsFlipped = []
         
         for image in productImages {
             guard let url = URL(string: image.src ?? ""), let id = image.id else { break }
-        
+            
             do {
                 let data = try Data(contentsOf: url)
                 guard let urlImage = UIImage(data: data) else { break }
@@ -272,11 +304,16 @@ class GameScene: SKScene {
                         color: UIColor.white,
                         size: CGSize(width: sizeOfCards, height: sizeOfCards))
                 
+                // Start a new row
+                
                 if (currentImage % numberOfCardsRow == 0) {
                     previousY = previousY + sizeOfCards + heightSpacing
                     previousX = (self.size.width / -2) + widthPadding*0.5 + sizeOfCards*0.5 + widthSpacing
                 }
+                
                 currentImage += 1
+                
+                // Update position
                 
                 card.position = CGPoint(x: previousX, y: previousY)
                 previousX = previousX + sizeOfCards + widthSpacing
@@ -287,9 +324,11 @@ class GameScene: SKScene {
                 cards.append(card)
                 self.addChild(card)
             } catch {
-                return
+                presentMenu()
             }
         }
+        
+        // Display all cards at once
         
         for card in cards {
             card.run(SKAction.scale(to: 1.0, duration: 0.3))
@@ -300,27 +339,28 @@ class GameScene: SKScene {
         }
     }
     
-    func initializeScore() {
+    private func initializeScore() {
+        currentScore = 0
         scoreLabel = SKLabelNode(fontNamed: "Helvetica")
         scoreLabel?.position = CGPoint(x: 0, y: self.size.height / -2 + 100)
         scoreLabel?.text = "Score \(currentScore)"
         scoreLabel?.color = UIColor.white
-        scoreLabel?.fontSize = 60
+        scoreLabel?.fontSize = 40
         self.addChild(scoreLabel)
         
         scoreLabel.run(SKAction.scale(to: 1.0, duration: 0.3))
     }
     
-    func compareCards() {
+    private func compareCards() {
         let count = cardsFlipped.count
-        let scaleDown = SKAction.scale(to: 0.5, duration: 0.3)
-        let scaleUp = SKAction.scale(to: 1.0, duration: 0.3)
-        let sequence = SKAction.sequence([scaleDown, scaleUp])
+        let sequence = SKAction.sequence([
+            SKAction.scale(to: 0.5, duration: 0.3),
+            SKAction.scale(to: 1.0, duration: 0.3)])
         
         if !matchThree && cardsFlipped.count > 0 && cardsFlipped.count % 2 == 0 {
             if cardsFlipped[count - 2].id == cardsFlipped[count - 1].id {
-               
-                // found a match
+                
+                // Match found
                 
                 cardsFlipped[count - 2].run(sequence)
                 cardsFlipped[count - 1].run(sequence)
@@ -328,8 +368,8 @@ class GameScene: SKScene {
                 currentScore += 1
                 updateScore()
             } else {
-                
-                // no match
+
+                // No match flip cards back
                 
                 cardsFlipped[count - 2].run(sequence) {
                     self.cardsFlipped[count - 2].flipCard()
@@ -342,7 +382,7 @@ class GameScene: SKScene {
             if cardsFlipped[count - 2].id == cardsFlipped[count - 1].id &&
                 cardsFlipped[count - 2].id == cardsFlipped[count - 3].id {
                 
-                // found a match
+                // Found a match
                 
                 cardsFlipped[count - 3].run(sequence)
                 cardsFlipped[count - 2].run(sequence)
@@ -352,7 +392,7 @@ class GameScene: SKScene {
                 updateScore()
             } else {
                 
-                // no match
+                // No match flip cards back
                 
                 cardsFlipped[count - 3].run(sequence) {
                     self.cardsFlipped[count - 3].flipCard()
@@ -367,7 +407,7 @@ class GameScene: SKScene {
         }
     }
     
-    func updateScore() {
+    private func updateScore() {
         scoreLabel.text = "Score \(currentScore)"
         
         if currentScore == numberOfCards {
@@ -384,22 +424,25 @@ class GameScene: SKScene {
         }
     }
     
-    func presentEndGame() {
-        for i in 1...25 {
+    private func presentEndGame() {
+        
+        // Display snowflake animation
+        
+        for i in 0...24 {
             snowAnimation.append(SKSpriteNode(imageNamed: "freesnowflake"))
-            snowAnimation[i - 1].size = CGSize(width: 100, height: 100)
-            snowAnimation[i - 1].physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 100, height: 100))
-            snowAnimation[i - 1].physicsBody?.linearDamping = CGFloat.random(in: 5.0 ..< 15.0)
-            self.addChild(snowAnimation[i - 1])
+            snowAnimation[i].size = CGSize(width: 100, height: 100)
+            snowAnimation[i].physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 100, height: 100))
+            snowAnimation[i].physicsBody?.linearDamping = CGFloat.random(in: 5.0 ..< 15.0)
+            self.addChild(snowAnimation[i])
             
-            snowAnimation[i - 1].position = CGPoint(
+            snowAnimation[i].position = CGPoint(
                 x: CGFloat.random(in: size.width / -2 ..< size.width / 2),
                 y: CGFloat.random(in: size.height / 2 ..< size.height / 2 + 2000))
         }
         
         endGameLabel = SKLabelNode(fontNamed: "Helvetica")
         endGameLabel.text = "YOU WIN!"
-        endGameLabel.fontSize = 70
+        endGameLabel.fontSize = 80
         endGameLabel.position = CGPoint(x: 0, y: 100)
         self.addChild(endGameLabel)
         
@@ -409,7 +452,7 @@ class GameScene: SKScene {
         
         returnToMenuLabel = SKLabelNode(fontNamed: "Helvetica")
         returnToMenuLabel.text = "RETURN TO MENU"
-        returnToMenuLabel.fontSize = 50
+        returnToMenuLabel.fontSize = 60
         returnToMenuLabel.position = CGPoint(x: 0, y: endGameLabel.position.y - 200)
         returnToMenuLabel.name = "return_to_menu"
         self.addChild(returnToMenuLabel)

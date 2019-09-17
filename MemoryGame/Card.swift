@@ -8,11 +8,11 @@
 
 import SpriteKit
 
+// MARK: Card
+
 class Card: SKSpriteNode {
-    let frontImage: SKTexture?
-    let backImage: SKTexture?
-    var cardFlipped: Bool
-    let id: Int
+    
+    // MARK: Init
     
     init(id: Int, frontImage: SKTexture?, backImage: SKTexture?, color: UIColor, size: CGSize) {
         self.id = id
@@ -22,6 +22,13 @@ class Card: SKSpriteNode {
         super.init(texture: frontImage, color: color, size: size)
         self.name = "card"
     }
+    
+    // MARK: Internal
+    
+    let frontImage: SKTexture?
+    let backImage: SKTexture?
+    var cardFlipped: Bool
+    let id: Int
     
     func flipCard() {
         if cardFlipped {
